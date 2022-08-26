@@ -3,6 +3,7 @@ import "../styles/TodoListItem.css";
 import { useDispatch } from "react-redux";
 import { markTodoCompleted } from "../features/todosSlice";
 import { markTodoUncompleted } from "../features/todosSlice";
+import { removeTodo } from "../features/todosSlice";
 
 export const TodoListItem = ({ todo }) => {
 
@@ -23,7 +24,7 @@ export const TodoListItem = ({ todo }) => {
                 <button 
                     className="remove-button"
                     onClick={() =>
-                        dispatch(markTodoUncompleted({ id: todo.id }))
+                        dispatch(removeTodo({ id: todo.id }))
                     }>
                     Remove
                 </button>

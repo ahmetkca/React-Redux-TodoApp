@@ -1,9 +1,9 @@
 import React from "react";
 import "../styles/TodoListItem.css";
 import { useDispatch } from "react-redux";
-import { markTodoCompleted } from "../features/todosSlice";
-import { markTodoUncompleted } from "../features/todosSlice";
-import { removeTodo } from "../features/todosSlice";
+import { markTodoCompleted } from "../features/todos/todosSlice";
+import { markTodoUncompleted } from "../features/todos/todosSlice";
+import { removeTodo } from "../features/todos/todosSlice";
 
 export const TodoListItem = ({ todo }) => {
 

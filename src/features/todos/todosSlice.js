@@ -1,9 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { randomId } from "../utils/randomId";
+import { randomId } from "../../utils/randomId";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+
+export const fetchTodos = createAsyncThunk(
+    "todos/fetchTodos", 
+    async () => {
+        const res = await fetch("http://localhost:8080/todos")
+            .then(data => data.json());
+        return res;
+    }
+);
+
 
 const todosSlice = createSlice({
     name: "todos",
-    initialState: { todos: [] },
+    initialState: { todos: [], isLoading: false },
     reducers: {
         addTodo: (state, action) => {
             const { text } = action.payload;
@@ -27,6 +38,18 @@ const todosSlice = createSlice({
             if (todo) {
                 todo.isCompleted = false;
             }
+        }
+    }, 
+    extraReducers: {
+        [fetchTodos.pending]: (state) => {
+            state.isLoading = true;
+        },
+        [fetchTodos.fulfilled]: (state, { payload }) => {
+            state.isLoading = false;
+            state.todos = payload;
+        },
+        [fetchTodos.rejected]: (state) => {
+            state.isLoading = false;
         }
     }
 });

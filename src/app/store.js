@@ -1,5 +1,5 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import todosReducer from "../features/todosSlice";
+import todosReducer from "../features/todos/todosSlice";
 import filterByReducer from "../features/filterBy/filterBySlice";
 import thunk from "redux-thunk";
 

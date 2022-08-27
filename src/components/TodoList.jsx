@@ -1,20 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import "../styles/TodoList.css";
 import NewTodoForm from './NewTodoForm';
 import TodoListItem from './TodoListItem';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchTodos } from '../features/todos/todosSlice';
 
 
-const TodoList = (/*{ todos = [{ text: 'Hello World!' }] }*/) => {
+const TodoList = () => {
+    const dispatch = useDispatch();
 
-    const { todos } = useSelector(state => state.todos);
+    const { todos, isLoading } = useSelector(state => state.todos);
 
-    return (
-        <div className='list-wrapper'>
-            <NewTodoForm />
-            {todos.map(todo => (<TodoListItem key={todo.id} todo={todo} />))}
-        </div>
-        )
+    useEffect(() => {
+        dispatch(fetchTodos());
+    } , []);
+
+
+    return isLoading ? (
+            <div> Todos Loading... </div> 
+        ) : (
+            <div className='list-wrapper'>
+                <NewTodoForm />
+                {todos.map(todo => (<TodoListItem key={todo.id} todo={todo} />))}
+            </div>
+        );
 }
 
 export default TodoList;

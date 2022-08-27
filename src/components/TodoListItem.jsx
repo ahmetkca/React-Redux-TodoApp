@@ -1,32 +1,35 @@
 import React from "react";
 import "../styles/TodoListItem.css";
-import { useDispatch } from "react-redux";
-import { markTodoCompleted } from "../features/todos/todosSlice";
-import { markTodoUncompleted } from "../features/todos/todosSlice";
-import { removeTodo } from "../features/todos/todosSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { markTodoAsCompleteRequest } from "../features/todos/todosSlice";
+import { deleteTodoRequest } from "../features/todos/todosSlice";
 
 export const TodoListItem = ({ todo }) => {
 
     const dispatch = useDispatch();
+    const { isDeleting } = useSelector(state => state.todos);
 
     return (
         <div className="todo-item-container">
             <h3>{todo.text}</h3>
             <p>{todo.isCompleted ? "Completed" : "Uncompleted" }</p>
             <div className="buttons-container">
-                <button 
+                {!todo.isCompleted && (
+                    <button 
                     className="completed-button"
                     onClick={() => 
-                        dispatch(markTodoCompleted({ id: todo.id }))
+                        dispatch(markTodoAsCompleteRequest({ id: todo.id }))
                     }>
                     Mark as Completed
-                </button>
+                </button>)}
+                
                 <button 
+                    disabled={isDeleting}
                     className="remove-button"
                     onClick={() =>
-                        dispatch(removeTodo({ id: todo.id }))
+                        dispatch(deleteTodoRequest({ id: todo.id }))
                     }>
-                    Remove
+                    {isDeleting ? "Removing Todo..." : "Remove Todo" }
                 </button>
             </div>
         </div>

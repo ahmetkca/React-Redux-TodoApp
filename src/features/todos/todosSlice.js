@@ -11,23 +11,76 @@ export const fetchTodos = createAsyncThunk(
     }
 );
 
+export const createTodoRequest = createAsyncThunk(
+    "todos/createTodoRequest",
+    async ({ text }, thunkAPI) => {
+        const res = await fetch("http://localhost:8080/todos", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ text }),
+        })
+        const data = await res.json();
+
+        if (!res.ok) {
+            return thunkAPI.rejectWithValue(data);
+        }
+        thunkAPI.dispatch(addTodo(data));
+        return data;
+    }
+);
+
+export const deleteTodoRequest = createAsyncThunk(
+    "todos/deleteTodoRequest",
+    async ({ id }, thunkAPI) => {
+        const res = await fetch(`http://localhost:8080/todos/${id}`, {
+            method: "DELETE",
+        })
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            return thunkAPI.rejectWithValue(data);
+        }
+        thunkAPI.dispatch(removeTodo(data));
+        return data;
+    }
+);
+
+export const markTodoAsCompleteRequest = createAsyncThunk(
+    "todos/markTodoAsCompleteRequest",
+    async ({ id }, thunkAPI) => {
+        const res = await fetch(`http://localhost:8080/todos/${id}/complete`, {
+            method: "PUT",
+        })
+        const data = await res.json();
+
+        if (!res.ok) {
+            return thunkAPI.rejectWithValue(data);
+        }
+        thunkAPI.dispatch(markTodoCompleted(data));
+        return data;
+    }
+);
+
 
 const todosSlice = createSlice({
     name: "todos",
-    initialState: { todos: [], isLoading: false },
+    initialState: { todos: [], isLoading: false, isCreating: false, isDeleting: false },
     reducers: {
         addTodo: (state, action) => {
-            const { text } = action.payload;
-            console.log(text);
-            state.todos.push({ id: randomId() + state.todos.length + 1, text, isCompleted: false });
+            console.log(`addTodo action dispatched: ${JSON.stringify(action.payload)}`);
+            const todo = action.payload;
+            state.todos.push({ ...todo });
         },
         removeTodo: (state, action) => {
-            const { id } = action.payload;
-            state.todos = state.todos.filter(todo => todo.id !== id);
+            const todoToBeRemoved = action.payload;
+            state.todos = state.todos.filter(todo => todo.id !== todoToBeRemoved.id);
         },
         markTodoCompleted: (state, action) => {
-            const { id } = action.payload;
-            const todo = state.todos.find(todo => todo.id === id);
+            const todoToBeCompleted = action.payload;
+            const todo = state.todos.find(todo => todo.id === todoToBeCompleted.id);
             if (todo) {
                 todo.isCompleted = true;
             }
@@ -50,6 +103,28 @@ const todosSlice = createSlice({
         },
         [fetchTodos.rejected]: (state) => {
             state.isLoading = false;
+        },
+        [createTodoRequest.pending]: (state) => {
+            state.isCreating = true;
+        },
+        [createTodoRequest.fulfilled]: (state, { payload }) => {
+            state.isCreating = false;
+            console.log(`createTodoRequest fulfilled: ${JSON.stringify(payload)}`);
+        },
+        [createTodoRequest.rejected]: (state, { payload }) => {
+            console.error(`createTodoRequest rejected: ${JSON.stringify(payload)}`);
+            state.isCreating = false;
+        },
+        [deleteTodoRequest.pending]: (state) => {
+            state.isDeleting = true;
+        },
+        [deleteTodoRequest.fulfilled]: (state, { payload }) => {
+            state.isDeleting = false;
+            console.log(`deleteTodoRequest fulfilled: ${JSON.stringify(payload)}`);
+        },
+        [deleteTodoRequest.rejected]: (state, { payload }) => {
+            console.error(`deleteTodoRequest rejected: ${JSON.stringify(payload)}`);
+            state.isDeleting = false;
         }
     }
 });

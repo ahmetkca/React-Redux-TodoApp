@@ -9,7 +9,7 @@ export const createTodoRoute = {
         try {
             return res.status(200).json(createTodo({ text }));
         } catch (error) {
-            return res.status(500).json({ name: error.name, message: error.message });
+            return res.status(409).json({ name: error.name, message: error.message });
         }
     }
 }

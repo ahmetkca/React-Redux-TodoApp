@@ -9,7 +9,7 @@ import { fetchTodos } from '../features/todos/todosSlice';
 const TodoList = () => {
     const dispatch = useDispatch();
 
-    const { todos, isLoading } = useSelector(state => state.todos);
+    const { todos, isLoading, isCreating } = useSelector(state => state.todos);
 
     useEffect(() => {
         dispatch(fetchTodos());
@@ -17,11 +17,19 @@ const TodoList = () => {
 
 
     return isLoading ? (
-            <div> Todos Loading... </div> 
+            <div className='list-wrapper'>
+                <NewTodoForm />
+                <div>
+                    <h2 align='center'>Todos Loading...</h2>
+                </div> 
+            </div>
         ) : (
             <div className='list-wrapper'>
                 <NewTodoForm />
                 {todos.map(todo => (<TodoListItem key={todo.id} todo={todo} />))}
+                {isCreating &&
+                    <h2 align="center">New Todo Item is on the way...</h2>
+                }
             </div>
         );
 }

@@ -1,6 +1,9 @@
 # Redux
 
 <details>
+    <summary>Redux</summary>
+
+<details>
   <summary>If State Management Tool (such as <code>Redux</code>) is not used. (Click) </summary>
 
 ### A Single State
@@ -66,4 +69,36 @@ Redux's way of specifying what should happen to our `Redux Store` (central state
 
 > <h3>Components can only interact with the state by triggering Redux actions</h3>
 
+</details>
 
+---
+
+# Redux Thunk
+
+<details>
+    <summary>Redux Thunk</summary>
+
+> Even with Redux in place the components still have to contain the logic for doing all the asynchronous operations, such as fetching or updating server data. These sorts of operations are called <b><code>side effects</code></b>
+
+### Redux Thunk Work Flow
+<p align="center">
+    <img src="./images/reduxThunkWorkFlow.png" alt="Redux Thunk Work Flow" />
+</p>
+
+<p align="center">
+    <img src="./images/reduxthunkflow.png" alt="Redux Thunk Flow" />
+</p>
+
+```js
+        // instead of passing action to dispatch for example:
+            dispatch({ type, action });
+
+        // with redux thunk you can pass a asynchronous function
+            dispatch(async () => {
+                ...
+                dispatch(loadUserSuccess(user));    // dispatches action
+                dispatch(loadVideos());             // dispatches action
+                dispatch(async () => { ... });      // dispatches thunk
+            });
+```
+</details>

@@ -101,4 +101,9 @@ Redux's way of specifying what should happen to our `Redux Store` (central state
                 dispatch(async () => { ... });      // dispatches thunk
             });
 ```
+
+<p align="center">
+    <img src="./images/seperation_of_concern_sop.png" alt="Seperation of Concern" />
+</p>
+
 </details>

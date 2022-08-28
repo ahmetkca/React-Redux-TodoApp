@@ -48,6 +48,10 @@ export const TodoListItem = ({ todo }) => {
         <TodoListItemContainer>
             <h3>{todo.text}</h3>
             <p>{todo.isCompleted ? "Completed" : "Uncompleted" }</p>
+            <p>
+                Created at:&nbsp;
+                {(new Date(todo.createdAt)).toLocaleString()}
+            </p>
             <TodoListButtonsContainer>
                 {!todo.isCompleted && (
                     <TodoListItemCompleteButton 

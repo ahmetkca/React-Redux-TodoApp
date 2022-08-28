@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { randomId } from "../../utils/randomId";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchTodos = createAsyncThunk(

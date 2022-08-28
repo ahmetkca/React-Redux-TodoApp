@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
-    setTimeout(next, (Math.random() * 1000) + 250);
+    setTimeout(next, (Math.random() * 1000) + 350);
 })
 
 routes.forEach(route => {

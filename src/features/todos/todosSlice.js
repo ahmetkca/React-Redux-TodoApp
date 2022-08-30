@@ -21,7 +21,6 @@ export const createTodoRequest = createAsyncThunk(
             body: JSON.stringify({ text }),
         })
         const data = await res.json();
-
         if (!res.ok) {
             return thunkAPI.rejectWithValue(data);
         }
@@ -38,7 +37,6 @@ export const deleteTodoRequest = createAsyncThunk(
         })
 
         const data = await res.json();
-
         if (!res.ok) {
             return thunkAPI.rejectWithValue(data);
         }

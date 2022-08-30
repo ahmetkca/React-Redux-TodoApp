@@ -3,9 +3,15 @@ import { describe, it, expect, afterAll, afterEach, beforeAll } from "vitest";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 
-import todosReducer, { markTodoCompleted, removeTodo, fetchTodos, createTodoRequest, deleteTodoRequest } from "../features/todos/todosSlice.js";
-import { addTodo } from "../features/todos/todosSlice.js";
-
+import todosReducer, { 
+    addTodo,
+    markTodoCompleted, 
+    removeTodo, 
+    fetchTodos, 
+    createTodoRequest, 
+    deleteTodoRequest,
+} from "../features/todos/todosSlice.js";
+import { selectCompletedTodos } from "../features/selectors.js";
 import { configureStore, combineReducers, thunk } from "@reduxjs/toolkit";
 
 import { fetch } from "cross-fetch";
@@ -59,6 +65,46 @@ const server = setupServer(...restHandlers);
 
 
 describe("The todos slice", () => {
+
+    describe("The todos selectors", () => {
+        it("should return only the completed todos", () => {
+            const testTodos = [
+                {
+                    id: 1,
+                    text: "Learn React",
+                    isCompleted: true
+                },
+                {
+                    id: 2,
+                    text: "Learn Redux",
+                    isCompleted: true
+                },
+                {
+                    id: 3,
+                    text: "Learn React Native",
+                    isCompleted: false
+                }
+            ];
+
+            const expected = [
+                {
+                    id: 1,
+                    text: "Learn React",
+                    isCompleted: true
+                },
+                {
+                    id: 2,
+                    text: "Learn Redux",
+                    isCompleted: true
+                },
+            ];
+
+            const actual = selectCompletedTodos.resultFunc(testTodos);
+
+            expect(actual).to.deep.equal(expected);
+
+        });
+    }),
 
     describe("The todos thunks", () => {
         const rootReducer = combineReducers({
